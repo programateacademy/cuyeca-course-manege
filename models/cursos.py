@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 
 from config.database import Base
 
@@ -11,4 +11,5 @@ class Cursos(Base):
     lineas_de_trabajo = Column(String)
     objetivos_especificos = Column(String)
     tipo_de_curso = Column(String)
+    status = Column(Boolean)
     
