@@ -1,11 +1,11 @@
 from pydantic import BaseModel, Field
 
 class Admin(BaseModel):
-    
+    id: str 
     username: str = Field(max_length=15,min_length=5)
     password: str = Field(max_length=10,min_length=8)
-    role: str = Field(max_length=10, min_length=4)
-    is_superuser: bool = False
+    # role: str = Field(max_length=10, min_length=4)
+    # is_superuser: bool = False
     
     class Config:
         schema_extra = {
