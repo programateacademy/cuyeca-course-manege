@@ -38,3 +38,21 @@ def create_courses(courses:Courses)->dict:
     db = Session()
     CoursesService(db).create_courses(courses)
     return JSONResponse(content={"message":"Curso creado satisfactoriamente"},status_code=200)
+
+@courses_router.put('/courses/{id}', tags=['courses'],status_code=200)
+def update_courses(id:int, courses:Courses):
+    db = Session()
+    result = CoursesService(db).get_courses_by_id(id)
+    if not result:
+        return JSONResponse(status_code=400, content={"message":"Curso no encontrado con ese id"})
+    CoursesService(db).update_courses(id,courses)
+    return JSONResponse(content={"message":"Curso actualizado satisfactoriamente"},status_code=200)
+
+@courses_router.put('/courses', tags=['courses'],status_code=200)
+def update_courses_by_name(name:str, courses:Courses):
+    db = Session()
+    result= CoursesService(db).get_courses_by_name(name)
+    if not result:
+        return JSONResponse(status_code=400, content={"message":"Curso no encontrado con ese nombre"})
+    CoursesService(db).update_courses_by_name(name,courses)
+    return JSONResponse(content={"message":"Curso actualizado satisfactoriamente"},status_code=200)

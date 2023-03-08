@@ -41,6 +41,15 @@ class CoursesService():
         self.db.commit()
         return
     
+    def update_courses_by_name(self,name:str, data:Courses):
+        courses = self.db.query(CoursesModel).filter(CoursesModel.name == name).first()
+        courses.description = data.description
+        courses.lines_of_work = data.lines_of_work
+        courses.specific_objetives = data.specific_objetives
+        courses.type_of_course = data.type_of_course
+        self.db.commit()
+        return
+    
     def update_status_course(self, id:int):
         courses = self.db.query(CoursesModel).filter(CoursesModel.id == id).first()
         courses.status = False
