@@ -5,12 +5,14 @@ import config.database as _database
 import datetime as _dt
 
 
+
 class Superadmin(_database.Base):
     __tablename__='superadmin'
     id = _sql.Column(_sql.Integer, primary_key=True)
     username = _sql.Column(_sql.String(15),nullable = False) 
     password = _sql.Column(_sql.String(10),nullable = False)
     email = _sql.Column(_sql.String(20),nullable = False)
+    admins = _orm.relationship("Admin", back_populates="owner")
 
     def verify_password(self, password:str):
         return _hash.bcrypt.verify(password, self.password)
