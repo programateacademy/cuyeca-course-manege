@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status 
+from fastapi import APIRouter, Depends
 from fastapi import APIRouter, Path, Query
 from config.database import Session
 from models.courses import Courses as CoursesModel 
@@ -7,6 +7,7 @@ from typing import List
 from services.courses import CoursesService
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder 
+from config.database import Session
 
 
 courses_router = APIRouter()
@@ -67,3 +68,4 @@ def delete_courses(id: int) -> dict:
         return JSONResponse(status_code=400, content={"message": "Curso no encontrado con ese id"})
     CoursesService(db).delete_courses(id) # pasa la clave primaria como argumento
     return JSONResponse(content={"message": "Curso eliminado satisfactoriamente"}, status_code=200)
+
