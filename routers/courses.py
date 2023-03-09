@@ -58,6 +58,16 @@ def update_courses_by_name(name:str, courses:Courses):
     return JSONResponse(content={"message":"Curso actualizado satisfactoriamente"},status_code=200)
 
 
+@courses_router.patch('/courses/{id}', tags=['courses'], status_code=200)
+def update_status_course(id: int):
+    db = Session()
+    result= CoursesService(db).get_courses_by_id(id)
+    print ("Course status route")
+    if not result:
+        return JSONResponse(status_code=400, content={"message":"Curso no encontrado"})
+    CoursesService(db).update_status_course(id)
+    return JSONResponse(content={"message": "Estado de curso actualizado satisfactoriamente"})
+
 
 @courses_router.delete('/courses/{id}', tags=['courses'], status_code=200)
 def delete_courses(id: int) -> dict:
