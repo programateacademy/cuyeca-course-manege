@@ -21,6 +21,8 @@ Base.metadata.create_all(bind=engine)
 def message(): 
     return "Hello World"
 
+# endpoint that create a superadmin
+
 @app.post("/api/admin")
 async def create_superadmin(superadmin:_schemaadmin.SuperadminCreate,db: _orm.Session = _fastapi.Depends(_serviceadmin.get_db)):
     db_superadmin = await _serviceadmin.get_superadmin_by_email(superadmin.email,db)
@@ -28,7 +30,18 @@ async def create_superadmin(superadmin:_schemaadmin.SuperadminCreate,db: _orm.Se
         raise _fastapi.HTTPException(status_code=400, detail= "Email already exists in superadmin")
     return await _serviceadmin.create_superadmin(superadmin,db)
 
+@app.post("/api/token")
+async def generate_token(form_data:_security.OAuth2PasswordRequestForm = _fastapi.Depends(),db:_orm.Session = _fastapi.Depends(_serviceadmin.get_db)):
+    superadmin = await _serviceadmin.authenticate_superadmin(form_data.username, form_data.password,db)
+    
+    if not superadmin:
+        raise _fastapi.HTTPException(status_code=401, detail="Invalid Credentials")
+    
+    return await _serviceadmin.create_token(superadmin)
 
+@app.get("/api/admins/me", response_model=_schemaadmin.Superadmin)
+async def get_superadmin(superadmin: _schemaadmin.Superadmin = _fastapi.Depends(_serviceadmin.get_current_superadmin) ):
+    return superadmin  
 
 # this is a endpoint to prove react with fastapi
 @app.get("/api")
