@@ -7,9 +7,12 @@ class _SuperadminBase(_pydantic.BaseModel):
 
 class SuperadminCreate(_SuperadminBase):
     password:str
+    username:str
     
     class Config:
         orm_mode = True
+        
+
 
 class Superadmin(_SuperadminBase):
     id: int
