@@ -56,6 +56,7 @@ class CoursesService():
         self.db.commit()
         return
     
-    def delete_courses(self, id:int, data:Courses):
-        self.db.delete(data)
+    def delete_courses(self, id:int):
+        self.db.query(CoursesModel).filter(CoursesModel.id == id).delete()
         self.db.commit()
+        return

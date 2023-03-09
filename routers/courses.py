@@ -53,6 +53,17 @@ def update_courses_by_name(name:str, courses:Courses):
     db = Session()
     result= CoursesService(db).get_courses_by_name(name)
     if not result:
-        return JSONResponse(status_code=400, content={"message":"Curso no encontrado con ese nombre"})
+        return JSONResponse(status_code=400, content={"message":"Curso no actualizado"})
     CoursesService(db).update_courses_by_name(name,courses)
     return JSONResponse(content={"message":"Curso actualizado satisfactoriamente"},status_code=200)
+
+
+
+@courses_router.delete('/courses/{id}', tags=['courses'], status_code=200)
+def delete_courses(id: int) -> dict:
+    db = Session()
+    result = db.query(CoursesModel).filter(CoursesModel.id == id).first()
+    if not result:
+        return JSONResponse(status_code=400, content={"message": "Curso no encontrado con ese id"})
+    CoursesService(db).delete_courses(id) # pasa la clave primaria como argumento
+    return JSONResponse(content={"message": "Curso eliminado satisfactoriamente"}, status_code=200)
