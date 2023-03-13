@@ -59,8 +59,23 @@ async def get_admin(
     return await _serviceadmin.get_admin(admin_id,superadmin,db)
 
 
+@admin_router.delete("/api/admins/{admin_id}",tags=['admins'], status_code=204)
+async def delete_admin( 
+    admin_id:int,
+    superadmin: _schemaadmin.Superadmin = _fastapi.Depends(_serviceadmin.get_current_superadmin),
+    db:_orm.Session =_fastapi.Depends(_serviceadmin.get_db)):
+    
+    await _serviceadmin.delete_admin(admin_id,superadmin,db)
+    return{"message", "administrador eliminado satisfactoriamente"}
 
-
+@admin_router.put("/api/admins/{admin_id}",tags=['admins'], status_code=200)
+async def update_admin( 
+    admin_id:int,
+    admin: _schemaadmin.AdminCreate,
+    superadmin: _schemaadmin.Superadmin = _fastapi.Depends(_serviceadmin.get_current_superadmin),
+    db:_orm.Session =_fastapi.Depends(_serviceadmin.get_db)):
+    await _serviceadmin.update_admin(admin_id,admin,superadmin,db)
+    return{"message", "administrador actualizado satisfactoriamente"}
 
 
 
