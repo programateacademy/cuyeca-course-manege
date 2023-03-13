@@ -61,3 +61,27 @@ async def get_current_superadmin(db:_orm.Session = _fastapi.Depends(get_db), tok
         raise _fastapi.HTTPException(status_code=401, detail="Invalid Email or Password")
     
     return _schemaadmin.Superadmin.from_orm(superadmin)
+
+# services to admin
+
+async def create_admin(superadmin:_schemaadmin.Superadmin, db:_orm.Session, admin:_schemaadmin.AdminCreate):
+    admin = _modeladmin.Admin(**admin.dict(), owner_id =superadmin.id)
+    db.add(admin)
+    db.commit()
+    db.refresh(admin)
+    return _schemaadmin.Admin.from_orm(admin)
+
+async def get_admins(superadmin:_schemaadmin.Superadmin, db:_orm.Session):
+    admins = db.query(_modeladmin.Admin).filter_by(owner_id=superadmin.id)
+    return list(map(_schemaadmin.Admin.from_orm, admins))
+
+async def _admin_selector(admin_id:int,superadmin:_schemaadmin.Superadmin, db:_orm.Session):
+    admin = ( db.query(_modeladmin.Admin).filter_by(owner_id = superadmin.id).filter(_modeladmin.Admin.id == admin_id).first())
+    if admin is None:
+        raise _fastapi.HTTPException(status_code=404, detail="El administrador no existe")
+    return admin
+
+async def get_admin(admin_id:int,superadmin:_schemaadmin.Superadmin, db:_orm.Session):
+    admin = await _admin_selector(admin_id=admin_id, superadmin=superadmin, db=db)
+    
+    return _schemaadmin.Admin.from_orm(admin)
