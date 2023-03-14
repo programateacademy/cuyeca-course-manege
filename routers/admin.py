@@ -19,7 +19,7 @@ async def create_superadmin(superadmin:_schemaadmin.SuperadminCreate,db: _orm.Se
     db_superadmin = await _serviceadmin.get_superadmin_by_email(superadmin.email,db)
     if db_superadmin:
         raise _fastapi.HTTPException(status_code=400, detail= "Email already exists in superadmin")
-    await _serviceadmin.create_superadmin(superadmin,db)
+    superadmin= await _serviceadmin.create_superadmin(superadmin,db)
     
     return await _serviceadmin.create_token(superadmin)
 

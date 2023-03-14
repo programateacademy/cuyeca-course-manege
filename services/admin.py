@@ -105,3 +105,4 @@ async def update_admin(admin_id:int,admin:_schemaadmin.AdminCreate,superadmin:_s
     db.refresh(admin_db)
     
     return _schemaadmin.Admin.from_orm(admin_db)
+
