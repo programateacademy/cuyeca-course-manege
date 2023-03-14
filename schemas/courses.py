@@ -9,7 +9,7 @@ class Courses(BaseModel):
     lines_of_work: str = Field(max_length=500,min_length=5)
     specific_objetives: str = Field(max_length=500,min_length=15)
     type_of_course: str = Field(max_length=500,min_length=5)
-    status: bool
+    
 
     class Config:
         schema_extra = {
