@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Path, Query, UploadFile
+import shutil
+from fastapi import APIRouter, Path, Query, UploadFile, File
 from config.database import Session
 from models.lesson import Lesson as LessonModel
 from schemas.lesson import Lesson
@@ -14,10 +15,10 @@ lesson_router = APIRouter()
 def get_lesson() -> Lesson:
     db = Session()
     result = LessonService(db).get_lesson()
-    return JSONResponse (content=jsonable_encoder(result), status_code=200))
+    return JSONResponse (content=jsonable_encoder(result), status_code=200)
 
 @lesson_router.get('/lesson/{id}', tags=['lesson'], response_model=Lesson,status_code=200)
-def get_lesson_by_id(id: int) = Path(ge=1, le=2000)):
+def get_lesson_by_id(id:int = Path(ge=1,le=2000)):
     db = Session()
     result = LessonService(db).get_lesson_by_id(id)
     if not result:
@@ -33,10 +34,14 @@ def get_lesson_by_name(name:str = Query(min_length=1, max_length=500)):
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
 @lesson_router.post('/lesson', tags=['lesson'], status_code=200, response_model=dict,)
-def create_lesson(lesson: Lesson)->dict:
+def create_lesson(lesson: Lesson, file: UploadFile = File(...))->dict:
+    with open(f'{file.filename}', "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
     db = Session()
     LessonService(db).create_lesson(lesson)
     return JSONResponse(content={"message":"Lección creada satisfactoriamente"}, status_code=200)
+
+
 
 @lesson_router.put('/lesson/{id}', tags=['lesson'], status_code=200)
 def update_lesson(id:int, lesson:Lesson):
