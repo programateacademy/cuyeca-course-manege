@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from config.database import Base
-from pydantic import UploadFile, File
+from pydantic import UploadFile
 class Lesson (Base):
     __tablename__ = "lesson"
 
@@ -9,6 +9,7 @@ class Lesson (Base):
     description = Column(String)
     title_resource = Column(String)
     resource = Column(UploadFile[String])
+    status = Column(Boolean, default=True)
     
 
 

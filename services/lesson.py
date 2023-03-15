@@ -1,4 +1,4 @@
-from operator import __and__
+from operator import and_
 from models.lesson import Lesson as LessonModel
 from schemas.lesson import Lesson
 
@@ -11,11 +11,11 @@ class LessonService():
         return result
     
     def get_lesson_by_id(self,id:int):
-        result = self.db.query(LessonModel).filter(__and__(LessonModel.id == id , LessonModel.status == True)).first()
+        result = self.db.query(LessonModel).filter(and_(LessonModel.id == id , LessonModel.status == True)).first()
         return result
     
     def get_lesson_by_name(self,name:str):
-        result = self.db.query(LessonModel).filter(__and__(LessonModel.name == name, LessonModel.status == True)).first()
+        result = self.db.query(LessonModel).filter(LessonModel.name == name).first()
         return result
     
     def create_lesson(self,lesson:Lesson):
@@ -23,7 +23,8 @@ class LessonService():
             id= lesson.id,
             name = lesson.name,
             description = lesson.description,
-            status = lesson.status
+            title_resource = lesson.title_resource,
+            resouce = lesson.resource
         )
         self.db.add(new_lesson)
         self.db.commit()
@@ -33,7 +34,8 @@ def update_lesson(self,id:int, data:Lesson):
     lesson = self.db.query(LessonModel).filter(LessonModel.id == id).first()
     lesson.name = data.name
     lesson.description = data.description
-    lesson.status = data.status
+    lesson.title_resource = data.title_resource
+    lesson.resource = data.resource
     self.db.commit()
     return
 
@@ -41,7 +43,8 @@ def update_lesson_by_name(self,name:str, data:Lesson):
     lesson = self.db.query(LessonModel).filter(LessonModel.name == name).first()
     lesson.name = data.name
     lesson.description = data.description
-    lesson.status = data.status
+    lesson.title_resource = data.title_resource
+    lesson.resource = data.resource
     self.db.commit()
     return
 
