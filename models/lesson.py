@@ -7,6 +7,7 @@ class Lesson (Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
+    title_resource = Column(String)
     resource = Column(UploadFile[String])
     
 
