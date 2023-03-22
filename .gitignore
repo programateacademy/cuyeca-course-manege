@@ -8,10 +8,6 @@ __pycache__/
 
 #DB stuff
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8384b83d7f3aec3cee64e8eab53d2a2b51b60704
 # Distribution / packaging
 .Python
 build/
