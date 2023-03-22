@@ -79,7 +79,4 @@ def delete_courses(id: int) -> dict:
     CoursesService(db).delete_courses(id) # pasa la clave primaria como argumento
     return JSONResponse(content={"message": "Curso eliminado satisfactoriamente"}, status_code=200)
 
-# this is a endpoint to prove react with fastapi
-@courses_router.get("/api", tags=['courses'])
-def root():
-    return{"message":"Creación de cursos"}
+
