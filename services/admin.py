@@ -7,6 +7,7 @@ import sqlalchemy.orm as _orm
 import passlib.hash as _hash
 import jwt as _jwt
 import datetime as _dt
+from operator import and_
 
 
 oauth2schema = _security.OAuth2PasswordBearer(tokenUrl="/api/token")
