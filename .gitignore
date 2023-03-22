@@ -8,7 +8,7 @@ __pycache__/
 
 #DB stuff
 
-database.sqlite
+
 # Distribution / packaging
 .Python
 build/
