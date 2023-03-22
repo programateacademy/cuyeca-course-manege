@@ -79,6 +79,7 @@ async def update_admin(
 
 
 
+
 @admin_router.get("/api", tags=['admins'])
 async def root():
     return{"message":"ADMINISTRADORES"}

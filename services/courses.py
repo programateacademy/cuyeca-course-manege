@@ -1,6 +1,8 @@
 from operator import and_
 from models.courses import Courses as CoursesModel
 from schemas.courses import Courses
+# Access-Control-Allow-Origin: http://localhost:3000
+
 
 class CoursesService():
     def __init__(self,db) -> None:
