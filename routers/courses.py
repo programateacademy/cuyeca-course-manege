@@ -79,3 +79,5 @@ def delete_courses(id: int) -> dict:
     CoursesService(db).delete_courses(id) # pasa la clave primaria como argumento
     return JSONResponse(content={"message": "Curso eliminado satisfactoriamente"}, status_code=200)
 
+
+
