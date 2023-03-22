@@ -79,8 +79,14 @@ async def update_admin(
 
 
 
+<<<<<<< HEAD
 # this is a endpoint to prove react with fastapi
 # @admin_router.get("/api", tags=['admins'])
 # async def root():
 #     return{"message":"Creación administradores"}
+=======
+@admin_router.get("/api", tags=['admins'])
+async def root():
+    return{"message":"ADMINISTRADORES"}
+>>>>>>> 6c1da45643264ede92dabbd1bb6873066bfb5553
 
