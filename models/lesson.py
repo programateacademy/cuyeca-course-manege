@@ -8,7 +8,7 @@ class Lesson (Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
-    title_resource = Column(String)
+    path_resources = Column(String)
     status = Column(Boolean, default=True)
     
 
