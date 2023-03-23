@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class Courses(BaseModel):
+class Forum(BaseModel):
 
     id : Optional[int] = None
     topic: str = Field(max_length=500,min_length=5)
