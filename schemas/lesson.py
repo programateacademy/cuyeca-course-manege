@@ -14,6 +14,6 @@ class Lesson(BaseModel):
                 "id": 1,
                 "name": "Lesson 1",
                 "description": "Lesson 1 description",
-                "title_resource": "lectura 1",
+                "path_resource": "http://example.com"
             }
         }
