@@ -1,11 +1,14 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base
+from sqlalchemy.ext.declarative import declarative_base
 
-class Files(Base):
-    __tablename__ = "resources"
+Base = declarative_base()
+
+class Resource(Base):
+    __tablename__ = 'resource'
 
     id = Column(Integer, primary_key=True, index=True)
-    path_resource= Column(Integer, ForeignKey('lesson.id'))
+    lesson_id = Column(Integer, ForeignKey('lesson.id'))
+    file_path = Column(String)
 
-    upload = relationship("lesson", back_populates="resource")
+    lesson = relationship('Lesson', back_populates='resources')

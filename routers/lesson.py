@@ -34,9 +34,7 @@ def get_lesson_by_name(name:str = Query(min_length=1, max_length=500)):
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
 @lesson_router.post('/lesson', tags=['lesson'], status_code=200, response_model=dict,)
-def create_lesson(lesson: Lesson, file: UploadFile = File(...))->dict:
-    with open(f'{file.filename}', "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+def create_lesson(lesson: Lesson)->dict:
     db = Session()
     LessonService(db).create_lesson(lesson)
     return JSONResponse(content={"message":"Lección creada satisfactoriamente"}, status_code=200)
