@@ -1,15 +1,25 @@
-from typing import List
-from pydantic import BaseModel
+# from pydantic import BaseModel, Field, Config
+# from typing import List, Optional
 
-class ResourceBase(BaseModel):
-    file_path: str
+# class Resource:
+#     def __init__(self, name: str, value: int):
+#         self.name = name
+#         self.value = value
 
-class ResourceCreate(ResourceBase):
-    pass
+# class ResourceBase(BaseModel):
+#     name: str
+#     description: Optional[str] = None
 
-class Resource(ResourceBase):
-    id: int
-    lesson_id: int
+# class Resource(BaseModel):
+#     name: str
+#     url: str
 
-    class Config:
-        orm_mode = True
+# class ResourceCreate(ResourceBase):
+#     pass
+
+# class Resource(ResourceBase):
+#     id: int
+
+#     class Config:
+#         arbitrary_types_allowed = True
+
