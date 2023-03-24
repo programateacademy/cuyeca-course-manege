@@ -8,6 +8,8 @@ import passlib.hash as _hash
 import jwt as _jwt
 import datetime as _dt
 from operator import and_
+import json
+# from pydantic import BaseModel, exclude
 
 
 oauth2schema = _security.OAuth2PasswordBearer(tokenUrl="/api/token")
@@ -26,9 +28,13 @@ def get_db():
 async def get_superadmin_by_email(email:str, db:_orm.Session):
     return db.query(_modeladmin.Superadmin).filter(_modeladmin.Superadmin.email == email).first()
 
+# get admin by  username
+async def get_admin_by_username(username:str, db:_orm.Session):
+    return db.query(_modeladmin.Admin).filter(_modeladmin.Admin.username == username).first()
+
 # function with hash to create password
 async def create_superadmin(superadmin:_schemaadmin.SuperadminCreate, db:_orm.Session):
-    superadmin_obj = _modeladmin.Superadmin(email=superadmin.email,username=superadmin.username,password=_hash.bcrypt.hash(superadmin.password))
+    superadmin_obj = _modeladmin.Superadmin(email=superadmin.email, username=superadmin.username, password=_hash.bcrypt.hash(superadmin.password))
     db.add(superadmin_obj)
     db.commit()
     db.refresh(superadmin_obj)
@@ -47,11 +53,35 @@ async def authenticate_superadmin(email:str,password:str,db:_orm.Session):
     
     return superadmin
 
+# function to authenticate admin
+
+async def authenticate_admin(username:str, password:str, db:_orm.Session):
+    admin = await get_admin_by_username(db=db, username=username)
+    
+    if not admin:
+        return False
+    
+    if not admin.verify_password(password):
+        return False
+    
+    return admin
+
 
 async def create_token(superadmin:_modeladmin.Superadmin):
     superadmin_obj= _schemaadmin.Superadmin.from_orm(superadmin)
     
     token = _jwt.encode(superadmin_obj.dict(), JWT_SECRET)
+    
+    return dict(access_token=token, token_type="bearer")
+
+async def create_token_admin(admin:_modeladmin.Admin):
+    # # admin_obj= json.dumps(_schemaadmin.Admin.from_orm(admin))
+    # admin_obj.date_created.json.dumps()
+    # new_admin_obj = admin_obj.json.dumps()
+    # stringified_admin_obj = json.dumps(admin_obj)
+    admin_obj= _schemaadmin.Admin.from_orm(admin)
+    
+    token = _jwt.encode(admin_obj.dict(), JWT_SECRET)
     
     return dict(access_token=token, token_type="bearer")
 
@@ -64,10 +94,21 @@ async def get_current_superadmin(db:_orm.Session = _fastapi.Depends(get_db), tok
     
     return _schemaadmin.Superadmin.from_orm(superadmin)
 
+async def get_current_admin(db:_orm.Session = _fastapi.Depends(get_db), token:str = _fastapi.Depends(oauth2schema)):
+    try: 
+        payload = _jwt.decode(token,JWT_SECRET, algorithms=["HS256"])
+        admin = db.query(_modeladmin.Admin).get(payload["id"])
+    except:
+        raise _fastapi.HTTPException(status_code=401, detail="Invalid Email or Password")
+    
+    return _schemaadmin.Admin.from_orm(admin)
+
 # services to admin
 
 async def create_admin(superadmin:_schemaadmin.Superadmin, db:_orm.Session, admin:_schemaadmin.AdminCreate):
-    admin = _modeladmin.Admin(**admin.dict(), owner_id =superadmin.id)
+    admin_dict = admin.dict()
+    admin_dict["password"] = _hash.bcrypt.hash(admin.password)
+    admin = _modeladmin.Admin(**admin_dict, owner_id =superadmin.id )
     db.add(admin)
     db.commit()
     db.refresh(admin)

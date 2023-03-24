@@ -32,11 +32,25 @@ async def generate_token(form_data:_security.OAuth2PasswordRequestForm = _fastap
     
     return await _serviceadmin.create_token(superadmin)
 
+
+@admin_router.post("/api/token-admin", tags=['admin'])
+async def generate_token(form_data:_security.OAuth2PasswordRequestForm = _fastapi.Depends(),db:_orm.Session = _fastapi.Depends(_serviceadmin.get_db)):
+    admin = await _serviceadmin.authenticate_admin(form_data.username, form_data.password,db)
+    
+    if not admin:
+        raise _fastapi.HTTPException(status_code=401, detail="Invalid Credentials")
+    
+    return await _serviceadmin.create_token_admin(admin)
+
 @admin_router.get("/api/superadmin/me", tags=['superadmin'], response_model=_schemaadmin.Superadmin)
 async def get_superadmin(superadmin: _schemaadmin.Superadmin = _fastapi.Depends(_serviceadmin.get_current_superadmin) ):
     return superadmin  
 
 # ROUTES TO ADMINS
+
+@admin_router.get("/api/admin/me", tags=['admins'], response_model=_schemaadmin.Admin)
+async def get_admin_me(admin: _schemaadmin.Admin = _fastapi.Depends(_serviceadmin.get_current_superadmin) ):
+    return admin
 
 @admin_router.post("/api/admins",  tags=['admins'],response_model=_schemaadmin.Admin)
 async def create_admin(admin: _schemaadmin.AdminCreate, superadmin: _schemaadmin.Superadmin = _fastapi.Depends(_serviceadmin.get_current_superadmin),db:_orm.Session = _fastapi.Depends(_serviceadmin.get_db)):
