@@ -1,19 +1,18 @@
-from typing import Optional
-from pydantic import BaseModel, Field
-from fastapi import File
+from typing import List
+from pydantic import BaseModel
 
-class Lesson(BaseModel):
-    id: Optional[int] = None
-    name: str = Field(max_length=100, min_length=10)
-    description: str = Field(max_length=1000, min_length=10)
-    path_resource: str = Field(max_length=100, min_length=10)
+from models.resources import Resource
+
+class LessonBase(BaseModel):
+    name: str
+    description: str
+
+class LessonCreate(LessonBase):
+    pass
+
+class Lesson(LessonBase):
+    id: int
+    resources: List[Resource] = []
 
     class Config:
-        schema_extra = {
-            "example": {
-                "id": 1,
-                "name": "Lesson 1",
-                "description": "Lesson 1 description",
-                "path_resource": "http://example.com"
-            }
-        }
+        orm_mode = True
