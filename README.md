@@ -1,6 +1,7 @@
 ##  Activate virtual enviroment 
 
 source /venv/bin/activate 
+
 ## Install 
 
 pip3 install -r requirements.txt
