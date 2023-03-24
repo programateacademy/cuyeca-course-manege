@@ -11,7 +11,7 @@ class Lesson(Base):
     name = Column(String)
     description = Column(String)
 
-    resources = relationship('Resource', back_populates='lesson')
+   # resources = relationship('Resource', back_populates='lesson')
 
 
 

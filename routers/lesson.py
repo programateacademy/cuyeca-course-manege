@@ -39,8 +39,6 @@ def create_lesson(lesson: Lesson)->dict:
     LessonService(db).create_lesson(lesson)
     return JSONResponse(content={"message":"Lección creada satisfactoriamente"}, status_code=200)
 
-
-
 @lesson_router.put('/lesson/{id}', tags=['lesson'], status_code=200)
 def update_lesson(id:int, lesson:Lesson):
     db = Session()
@@ -58,7 +56,6 @@ def update_lesson_by_name(name:str, lesson:Lesson):
         return JSONResponse(content={"message":"nombre de lección no actualizado"}, status_code=400)
     LessonService(db).update_lesson_by_name(name, lesson)
     return JSONResponse(content={"message":"Nombre de lección actualizado satisfactoriamente"}, status_code=200)
-
 
 @lesson_router.patch('/lesson/', tags=['lesson'], status_code=200)
 def update_status_lesson(id:int):
@@ -78,4 +75,3 @@ def delete_lesson(id:int) -> dict:
         return JSONResponse(content={"message":"Lección no encontrada con ese id"}, status_code=400)
     LessonService(db).delete_lesson(id)
     return JSONResponse(content={"message":"lección eliminada satisfactoriamente"}, status_code=200)
-
