@@ -34,14 +34,10 @@ def get_lesson_by_name(name:str = Query(min_length=1, max_length=500)):
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
 @lesson_router.post('/lesson', tags=['lesson'], status_code=200, response_model=dict,)
-def create_lesson(lesson: Lesson, file: UploadFile = File(...))->dict:
-    with open(f'{file.filename}', "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+def create_lesson(lesson: Lesson)->dict:
     db = Session()
     LessonService(db).create_lesson(lesson)
     return JSONResponse(content={"message":"Lección creada satisfactoriamente"}, status_code=200)
-
-
 
 @lesson_router.put('/lesson/{id}', tags=['lesson'], status_code=200)
 def update_lesson(id:int, lesson:Lesson):
@@ -61,7 +57,6 @@ def update_lesson_by_name(name:str, lesson:Lesson):
     LessonService(db).update_lesson_by_name(name, lesson)
     return JSONResponse(content={"message":"Nombre de lección actualizado satisfactoriamente"}, status_code=200)
 
-
 @lesson_router.patch('/lesson/', tags=['lesson'], status_code=200)
 def update_status_lesson(id:int):
     db = Session()
@@ -80,4 +75,3 @@ def delete_lesson(id:int) -> dict:
         return JSONResponse(content={"message":"Lección no encontrada con ese id"}, status_code=400)
     LessonService(db).delete_lesson(id)
     return JSONResponse(content={"message":"lección eliminada satisfactoriamente"}, status_code=200)
-
