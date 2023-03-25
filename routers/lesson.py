@@ -11,10 +11,10 @@ from config.database import Session
 
 lesson_router = APIRouter()
 
-@lesson_router.get('/lesson', tags=['lesson'], response_model=List[Lesson],status_code=200)
-def get_lesson() -> Lesson:
+@lesson_router.get('/lessons', tags=['lessons'], response_model=List[Lesson],status_code=200)
+def get_lessons() -> Lesson:
     db = Session()
-    result = LessonService(db).get_lesson()
+    result = LessonService(db).get_lessons()
     return JSONResponse (content=jsonable_encoder(result), status_code=200)
 
 @lesson_router.get('/lesson/{id}', tags=['lesson'], response_model=Lesson,status_code=200)

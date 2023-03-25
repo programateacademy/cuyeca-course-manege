@@ -6,7 +6,7 @@ class LessonService():
     def __init__(self,db)-> None:
         self.db = db
 
-    def get_lesson(self):
+    def get_lessons(self):
         result = self.db.query(LessonModel).all()
         return result
     
