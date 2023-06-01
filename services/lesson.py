@@ -6,7 +6,7 @@ class LessonService():
     def __init__(self,db)-> None:
         self.db = db
 
-    def get_lessons(self):
+    def get_lesson(self):
         result = self.db.query(LessonModel).all()
         return result
     
@@ -22,7 +22,9 @@ class LessonService():
         new_lesson = LessonModel(
             id= lesson.id,
             name = lesson.name,
-            description = lesson.description
+            description = lesson.description,
+            video = lesson.video,
+            resources =lesson.resources
         )
         self.db.add(new_lesson)
         self.db.commit()
@@ -32,6 +34,8 @@ def update_lesson(self,id:int, data:Lesson):
     lesson = self.db.query(LessonModel).filter(LessonModel.id == id).first()
     lesson.name = data.name
     lesson.description = data.description
+    lesson.video = data.video
+    lesson.resources =data.resources
     self.db.commit()
     return
 
@@ -39,6 +43,8 @@ def update_lesson_by_name(self,name:str, data:Lesson):
     lesson = self.db.query(LessonModel).filter(LessonModel.name == name).first()
     lesson.name = data.name
     lesson.description = data.description
+    lesson.video = data.video
+    lesson.resources =data.resources
     self.db.commit()
     return
 

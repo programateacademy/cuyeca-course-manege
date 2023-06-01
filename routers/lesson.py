@@ -11,10 +11,10 @@ from config.database import Session
 
 lesson_router = APIRouter()
 
-@lesson_router.get('/lessons', tags=['lessons'], response_model=List[Lesson],status_code=200)
-def get_lessons() -> Lesson:
+@lesson_router.get('/lessons', tags=['lesson'], response_model=List[Lesson],status_code=200)
+def get_lesson() -> Lesson:
     db = Session()
-    result = LessonService(db).get_lessons()
+    result = LessonService(db).get_lesson()
     return JSONResponse (content=jsonable_encoder(result), status_code=200)
 
 @lesson_router.get('/lesson/{id}', tags=['lesson'], response_model=Lesson,status_code=200)
@@ -54,7 +54,7 @@ def update_lesson_by_name(name:str, lesson:Lesson):
     result = LessonService(db).get_lesson_by_name(name)
     if not result:
         return JSONResponse(content={"message":"nombre de lección no actualizado"}, status_code=400)
-    LessonService(db).update_lesson_by_name(name, lesson)
+    LessonService(db).update_lesson_by_name(name,lesson)
     return JSONResponse(content={"message":"Nombre de lección actualizado satisfactoriamente"}, status_code=200)
 
 @lesson_router.patch('/lesson/', tags=['lesson'], status_code=200)

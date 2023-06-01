@@ -10,8 +10,8 @@ class Lesson(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
-
-   # resources = relationship('Resource', back_populates='lesson')
+    video = Column(String)
+    resources = Column(String)
 
 
 
