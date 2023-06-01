@@ -11,7 +11,7 @@ class LessonService():
         return result
     
     def get_lesson_by_id(self,id:int):
-        result = self.db.query(LessonModel).filter(and_(LessonModel.id == id , LessonModel.status == True)).first()
+        result = self.db.query(LessonModel).filter(LessonModel.id == id ).first()
         return result
     
     def get_lesson_by_name(self,name:str):
@@ -30,31 +30,31 @@ class LessonService():
         self.db.commit()
         return
     
-def update_lesson(self,id:int, data:Lesson):
-    lesson = self.db.query(LessonModel).filter(LessonModel.id == id).first()
-    lesson.name = data.name
-    lesson.description = data.description
-    lesson.video = data.video
-    lesson.resources =data.resources
-    self.db.commit()
-    return
-
-def update_lesson_by_name(self,name:str, data:Lesson):
-    lesson = self.db.query(LessonModel).filter(LessonModel.name == name).first()
-    lesson.name = data.name
-    lesson.description = data.description
-    lesson.video = data.video
-    lesson.resources =data.resources
-    self.db.commit()
-    return
-
-def update_status_lesson(self, id:int):
+    def update_lesson(self,id:int, data:Lesson):
         lesson = self.db.query(LessonModel).filter(LessonModel.id == id).first()
-        lesson.status = False
+        lesson.name = data.name
+        lesson.description = data.description
+        lesson.video = data.video
+        lesson.resources =data.resources
         self.db.commit()
         return
 
-def delete_lesson(self, id:int):
-    self.db.query(LessonModel).filter(LessonModel.id == id).delete()
-    self.db.commit()
-    return
+    def update_lesson_by_name(self,name:str, data:Lesson):
+        lesson = self.db.query(LessonModel).filter(LessonModel.name == name).first()
+        lesson.name = data.name
+        lesson.description = data.description
+        lesson.video = data.video
+        lesson.resources =data.resources
+        self.db.commit()
+        return
+
+    def update_status_lesson(self, id:int):
+            lesson = self.db.query(LessonModel).filter(LessonModel.id == id).first()
+            lesson.status = False
+            self.db.commit()
+            return
+
+    def delete_lesson(self, id:int):
+        self.db.query(LessonModel).filter(LessonModel.id == id).delete()
+        self.db.commit()
+        return

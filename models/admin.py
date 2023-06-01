@@ -3,10 +3,11 @@ import sqlalchemy.orm as _orm
 import passlib.hash as _hash
 import config.database as _database
 import datetime as _dt
+from config.database import Base
 
 
 
-class Superadmin(_database.Base):
+class Superadmin(Base):
     __tablename__='superadmin'
     id = _sql.Column(_sql.Integer, primary_key=True)
     username = _sql.Column(_sql.String(15),nullable = False) 

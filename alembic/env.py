@@ -18,7 +18,41 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+from models.lesson import Base as LessonBase
+from models.admin import Base as BaseAdmin
+from models.courses import Base as BaseCourses
+from models.forum import Base as BaseForum
+from alembic import op
+from sqlalchemy import MetaData
+from sqlalchemy import create_engine
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./database.sqlite"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+target_metadata = MetaData()
+
+def upgrade():
+    LessonBase.metadata.create_all(bind=op.get_bind())
+    BaseAdmin.metadata.create_all(bind=op.get_bind())
+    BaseCourses.metadata.create_all(bind=op.get_bind())
+    BaseForum.metadata.create_all(bind=op.get_bind())
+    target_metadata.reflect(bind=op.get_bind())
+
+def downgrade():
+    # Define the downgrade logic here if needed
+    pass
+
+def run_migrations_online():
+    connectable = engine.connect()
+
+    with connectable as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata
+        )
+
+        with context.begin_transaction():
+            context.run_migrations()
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
